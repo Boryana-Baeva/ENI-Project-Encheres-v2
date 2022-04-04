@@ -23,7 +23,7 @@
 	                            <h4 class="col card-title text-center pt-3 pb-5">Inscription</h4>
 	
 	                            <div class="col pb-4">
-	                                <label>Adresse e-mail</label>
+	                                <label>Email</label>
 	                                <input type="email" name="email" class="form-control" placeholder="Email">
 	                            </div>
 	
