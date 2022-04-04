@@ -15,10 +15,8 @@
 	    <div class="container" id="login-form-container">
 	        <div class="row">
 	            <div class="col col-md-8 col-lg-5 offset-md-4 mx-auto">
-	
 	                <div class="card bg-white shadow mt-4 p-4 px-5">
 	                    <div class="card-body">
-	
 	                        <form method="post" class="g-3" id="login-form">
 	                            <h4 class="col card-title text-center pt-3 pb-5">Inscription</h4>
 	
