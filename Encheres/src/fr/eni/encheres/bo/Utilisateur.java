@@ -202,6 +202,11 @@ public class Utilisateur implements Serializable {
 	}
 	
 	
+	public Retrait getLieuRetraitParDefaut()
+	{
+		return new Retrait(this.rue, this.codePostal, this.ville);
+	}
+	
 	@Override
 	public String toString() {
 		return "Utilisateur [id=" + id + ", pseudo=" + pseudo + ", nom=" + nom + ", prenom=" + prenom + ", email="

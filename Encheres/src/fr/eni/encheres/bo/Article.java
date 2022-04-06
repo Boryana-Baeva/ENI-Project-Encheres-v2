@@ -16,10 +16,50 @@ public class Article implements Serializable {
 	private Categorie categorie;
 	private Utilisateur vendeur;
 	private Retrait lieuRetrait;
+	private EtatVente etatVente;
 	
 	// Constructors
 	public Article() {}
 
+	public Article(String nom, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres,
+			int miseAPrix, Utilisateur vendeur, Categorie categorie) {
+		super();
+		this.nom = nom;
+		this.description = description;
+		this.dateDebutEncheres = dateDebutEncheres;
+		this.dateFinEncheres = dateFinEncheres;
+		this.miseAPrix = miseAPrix;
+		this.categorie = categorie;
+		this.vendeur = vendeur;
+		this.etatVente = EtatVente.CREE;
+		this.lieuRetrait = vendeur.getLieuRetraitParDefaut();
+		
+	}
+
+	public Article(String nom, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres,
+			int miseAPrix, int prixVente, Categorie categorie, Utilisateur vendeur, EtatVente etatVente ,
+			Retrait lieuRetrait) {
+		this(nom,description,dateDebutEncheres,dateFinEncheres,miseAPrix,vendeur,categorie);
+		this.etatVente=etatVente;
+		this.lieuRetrait=lieuRetrait;
+		
+	}
+	
+	
+	public Article(String nom, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres,
+			int miseAPrix, int prixVente, Categorie categorie, Utilisateur vendeur) {
+		this(nom,description,dateDebutEncheres,dateFinEncheres,miseAPrix,prixVente,categorie,vendeur,EtatVente.CREE, vendeur.getLieuRetraitParDefaut());		
+	}
+	
+	
+	public Article(int id, String nom, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres,
+			int miseAPrix, int prixVente, Categorie categorie, Utilisateur vendeur, EtatVente etatVente,
+			Retrait lieuRetrait) {
+		this(nom, description, dateDebutEncheres, dateFinEncheres, miseAPrix, prixVente, categorie, vendeur, etatVente,
+				lieuRetrait);
+		this.id = id;
+	}
+	
     // Getters and Setters
 	/**
 	 * @return the id
@@ -82,6 +122,13 @@ public class Article implements Serializable {
 		return lieuRetrait;
 	}
 	/**
+	 * @return the etatVente
+	 */
+	public EtatVente getEtatVente() {
+		return etatVente;
+	}
+
+	/**
 	 * @param id the id to set
 	 */
 	public void setId(int id) {
@@ -141,7 +188,12 @@ public class Article implements Serializable {
 	public void setLieuRetrait(Retrait lieuRetrait) {
 		this.lieuRetrait = lieuRetrait;
 	}
-	
+	/**
+	 * @param etatVente the etatVente to set
+	 */
+	public void setEtatVente(EtatVente etatVente) {
+		this.etatVente = etatVente;
+	}
 	
 	@Override
 	public String toString() {
@@ -149,5 +201,5 @@ public class Article implements Serializable {
 				+ dateDebutEncheres + ", dateFinEncheres=" + dateFinEncheres + ", miseAPrix=" + miseAPrix
 				+ ", prixVente=" + prixVente + ", categorie=" + categorie + ", vendeur=" + vendeur + ", lieuRetrait=" + lieuRetrait + "]";
 	}
-	
+
 }
