@@ -4,13 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.eni.encheres.exceptions.BusinessException;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
-import fr.eni.encheres.codes.ErrorCodesDAL;
+import fr.eni.encheres.codes.ErrorCodes;
 import fr.eni.encheres.dal.ConnectionProvider;
 import fr.eni.encheres.dal.UtilisateurDAO;
 
@@ -70,31 +72,107 @@ public class UtilisateurDAOJDBCmpl implements UtilisateurDAO {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			BusinessException be = new BusinessException();
-			be.ajouterErreur(ErrorCodesDAL.LECTURE_UTILISATEURS_ECHEC);
-			throw be;
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(ErrorCodes.GET_UTILISATEUR_FAIL);
+			throw businessException;
 		}
 		
-		return utilisateurs;
-		
+		return utilisateurs;	
 	}
 
 	@Override
 	public Utilisateur getById(int id) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Utilisateur utilisateur = null;
+
+		try (Connection connection = ConnectionProvider.getConnection()) {
+			PreparedStatement statement = connection.prepareStatement(GET_BY_ID);
+			statement.setInt(1, id);
+			ResultSet rs = statement.executeQuery();
+
+			if (rs.next()) {
+				utilisateur = utilisateurBuilder(rs);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(ErrorCodes.GET_UTILISATEUR_FAIL);
+			throw businessException;
+		}
+
+		return utilisateur;
 	}
 
 	@Override
 	public Utilisateur getByPseudo(String pseudo) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Utilisateur utilisateur = null;
+
+		try (Connection connection = ConnectionProvider.getConnection()) {
+			PreparedStatement statement = connection.prepareStatement(GET_BY_PSEUDO);
+			statement.setString(1, pseudo);
+			ResultSet rs = statement.executeQuery();
+
+			if (rs.next()) {
+				utilisateur = utilisateurBuilder(rs);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(ErrorCodes.GET_UTILISATEUR_FAIL);
+			throw businessException;
+		}
+
+		return utilisateur;
 	}
 
 	@Override
 	public Utilisateur insert(Utilisateur utilisateur) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if (utilisateur == null) {
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(ErrorCodes.INSERT_NULL_OBJECT_FAIL);
+			throw businessException;
+		}
+
+		try (Connection connection = ConnectionProvider.getConnection()) {
+
+			PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+			statement.setString(1, utilisateur.getPseudo());
+			statement.setString(2, utilisateur.getNom());
+			statement.setString(3, utilisateur.getPrenom());
+			statement.setString(4, utilisateur.getEmail());
+			if (utilisateur.getTelephone() != null) {
+				statement.setString(5, utilisateur.getTelephone());
+			} else {
+				statement.setNull(5, Types.VARCHAR);
+			}
+			statement.setString(6, utilisateur.getRue());
+			statement.setString(7, utilisateur.getCodePostal());
+			statement.setString(8, utilisateur.getVille());
+			statement.setString(9, utilisateur.getPassword());
+			statement.setInt(10, utilisateur.getCredit());
+			statement.setBoolean(11, utilisateur.isAdministrateur());
+
+			statement.executeUpdate();
+			ResultSet rs = statement.getGeneratedKeys();
+
+			if (rs.next()) {
+				utilisateur.setId(rs.getInt(1));
+			}
+
+			statement.close();
+			connection.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(ErrorCodes.INSERT_OBJECT_FAIL);
+			throw businessException;
+		}
+		return utilisateur;
 	}
 
 	@Override
@@ -117,7 +195,24 @@ public class UtilisateurDAOJDBCmpl implements UtilisateurDAO {
 
 	@Override
 	public List<String> getAllPseudos() throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<String> pseudos = new ArrayList<>();
+		
+		try(Connection connection = ConnectionProvider.getConnection()) {
+			PreparedStatement statement = connection.prepareStatement(GET_ALL_PSEUDOS);
+			
+			ResultSet rs = statement.executeQuery();
+			
+			while (rs.next()) {
+				pseudos.add(rs.getString("pseudo"));
+			}
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(ErrorCodes.GET_ALL_PSEUDOS_FAIL);
+			throw businessException;
+		}
+		return pseudos;
 	}
 }
