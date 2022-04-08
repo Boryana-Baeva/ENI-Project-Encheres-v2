@@ -14,9 +14,13 @@ import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.codes.ErrorCodes;
 import fr.eni.encheres.dal.ConnectionProvider;
+//import fr.eni.encheres.dal.ArticleDAO;
+//import fr.eni.encheres.dal.CategorieDAO;
+//import fr.eni.encheres.dal.EnchereDAO;
+//import fr.eni.encheres.dal.RetraitDAO;
 import fr.eni.encheres.dal.UtilisateurDAO;
 
-public class UtilisateurDAOJDBCmpl implements UtilisateurDAO {
+public class UtilisateurDAOJDBCImpl implements UtilisateurDAO {
 		
 	private static final String GET_ALL = "SELECT * FROM UTILISATEURS";
 	private static final String GET_BY_ID = "SELECT * FROM UTILISATEURS WHERE no_utilisateur=?";
@@ -27,6 +31,12 @@ public class UtilisateurDAOJDBCmpl implements UtilisateurDAO {
 	private static final String DELETE = "DELETE UTILISATEURS WHERE no_utilisateur=?";
 	private static final String GET_ALL_UTILISATEUR_ARTICLES = "SELECT * FROM ARTICLES_VENDUS WHERE no_utilisateur=?";
 	private static final String GET_ALL_PSEUDOS = "SELECT pseudo FROM UTILISATEURS";
+	
+	
+	//private static EnchereDAO enchereDao = new EnchereDAOJDBCImpl();
+	//private static ArticleDAO articleDao = new ArticleVenduDAOJDBCImpl();
+	//private static CategorieDAO categorieDao = new CategorieDAOJDBCImpl();
+	//private static RetraitDAO retraitDao = new RetraitDAOJDBCImpl();
 	
 	/**
 	 * Creates a new user from a ResultSet
@@ -177,19 +187,94 @@ public class UtilisateurDAOJDBCmpl implements UtilisateurDAO {
 
 	@Override
 	public void update(Utilisateur utilisateur) throws BusinessException {
-		// TODO Auto-generated method stub
+		
+		try (Connection connection = ConnectionProvider.getConnection()) {
+			PreparedStatement statement = connection.prepareStatement(UPDATE);
+			statement.setString(1, utilisateur.getNom());
+			statement.setString(2, utilisateur.getPrenom());
+			statement.setString(3, utilisateur.getEmail());
+			if (utilisateur.getTelephone() != null) {
+				statement.setString(4, utilisateur.getTelephone());
+			} else {
+				statement.setNull(4, Types.VARCHAR);
+			}
+			statement.setString(5, utilisateur.getRue());
+			statement.setString(6, utilisateur.getCodePostal());
+			statement.setString(7, utilisateur.getVille());
+			statement.setString(8, utilisateur.getPassword());
+			statement.setInt(9, utilisateur.getCredit());
+			statement.setBoolean(10, utilisateur.isAdministrateur());
+			statement.setInt(11, utilisateur.getId());
+
+			statement.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(ErrorCodes.UPDATE_OBJECT_FAIL);
+			throw businessException;
+
+		}
 		
 	}
 
 	@Override
 	public void delete(int id) throws BusinessException {
-		// TODO Auto-generated method stub
+		
+		try (Connection connection = ConnectionProvider.getConnection()) {
+			
+			PreparedStatement statement = connection.prepareStatement(DELETE);
+			statement.setInt(1, id);
+			
+			/*List<Article> listeArticles=articleDao.getByVendeur(id);
+			
+			for (Article article : listeArticles) {
+				articleDao.delete(article.getId());
+			}*/
+			
+			statement.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(ErrorCodes.DELETE_OBJECT_FAIL);
+			throw businessException;
+		}
 		
 	}
 
 	@Override
 	public List<Article> getAllUtilisateurArticles(Utilisateur utilisateur) throws BusinessException {
-		// TODO Auto-generated method stub
+		
+		/*List<ArticleVendu> listeArticlesVendus = new ArrayList<ArticleVendu>();
+
+		try (Connection connection = ConnectionProvider.getConnection()) {
+			PreparedStatement statement = connection.prepareStatement(GET_ARTICLES_VENDUS);
+			statement.setInt(1, utilisateur.getId());
+			
+			ResultSet rs = statement.executeQuery();
+			
+			while(rs.next()) {
+				ArticleVendu articleVendu = new ArticleVendu();
+				articleVendu.setId(rs.getInt("no_article"));
+				articleVendu.setNom(rs.getString("nom_article"));
+				articleVendu.setDescription(rs.getString("description"));
+				articleVendu.setDateDebutEncheres((rs.getDate("date_debut_encheres").toLocalDate()));
+				articleVendu.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+				articleVendu.setMiseAPrix(rs.getInt("prix_initial"));
+				articleVendu.setPrixVente(rs.getInt("prix_vente"));
+				articleVendu.setVendeur(utilisateur);
+				articleVendu.setCategorie(categorieDao.getById(rs.getInt("no_categorie")));
+				articleVendu.setLieuRetrait(retraitDao.getById(rs.getInt("no_retrait")));
+				listeArticlesVendus.add(articleVendu);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.LECTURE_ARTICLES_ECHEC);
+			throw businessException;
+		}
+		return listeArticlesVendus;*/
 		return null;
 	}
 
