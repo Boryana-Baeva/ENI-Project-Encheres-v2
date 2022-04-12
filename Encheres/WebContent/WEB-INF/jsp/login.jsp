@@ -22,32 +22,61 @@
 	                        <form method="post" class="g-3" id="login-form">
 	                            <h4 class="col card-title text-center pt-3 pb-5">Connexion</h4>
 	
-	                            <div class="col pb-4">
-	                                <label>Adresse e-mail</label>
-	                                <input type="email" name="email" class="form-control" placeholder="Email">
+								<div class="input-group">
+									<div class="input-group-prepend">
+									    <span class="input-group-text" id="basic-addon1">
+										    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="24" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+											  <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
+											</svg>
+									    </span>
+								  	</div>
+		                            <div class="col pb-4">
+		                                
+		                                <input id="username" type="text" name="username" class="form-control" placeholder="Indentifiant">
+		                            </div>
+		                        </div>
+		
+								<div class="input-group">
+									<div class="input-group-prepend">
+									    <span class="input-group-text" id="basic-addon1">
+										    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="24" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+											  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+											</svg>
+									    </span>
+								  	</div>
+		                            <div class="col pb-4">
+
+		                                <input id="password" type="password" name="password" id="password" class="form-control" placeholder="******">
+		                                <i class="bi bi-eye-slash position-absolute d-none d-md-block" id="togglePassword"></i>
+		                            </div>
+		                       	</div>
+	
+								<div class="input-group">
+		                            <!-- Remember me -->
+		                            <div class="col pb-4">
+		                                <div class="form-check">
+		                                    <input class="form-check-input" type="checkbox" id="rememberMe" name="remember_me">
+		                                    <label class="form-check-label" for="rememberMe"> Se souvenir de moi</label>
+		                                </div>
+		                            </div>
 	                            </div>
 	
-	                            <div class="col pb-4 position-relative">
-	                                <label>Mot de passe</label>
-	                                <input type="password" name="password" id="password" class="form-control" placeholder="Password">
-	                                <i class="bi bi-eye-slash position-absolute d-none d-md-block" id="togglePassword"></i>
-	                            </div>
-	
-	                            <!-- Remember me -->
-	                            <div class="col pb-4">
-	                                <div class="form-check">
-	                                    <input class="form-check-input" type="checkbox" id="rememberMe" name="remember_me">
-	                                    <label class="form-check-label" for="rememberMe"> Se souvenir de moi</label>
-	                                </div>
-	                            </div>
-	
-	                            <!-- Button Submit  -->
+								
+								<!-- Button Submit  -->
 	                            <div class="col text-center pt-4">
 	                                <button type="submit" id="btn-login" name="btn-login"
 	                                        class="btn btn-primary w-100">Se connecter
 	                                </button>
-	                            </div>        
-	
+	                            </div> 
+	                            
+	                            
+	                            <div class="col text-center pt-4">
+	                            <h6>Vous avez pas encore de compte ?</h6>
+	                                <a href="<%=request.getContextPath()%>/register" id="btn-register" name="btn-register"
+	                                        class="btn btn-secondary w-100">S'inscrire
+	                                </a>
+	                            </div>     
+								
 	                        </form>
 	                    </div>
 	                </div>

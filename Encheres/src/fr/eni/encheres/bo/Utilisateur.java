@@ -20,7 +20,9 @@ public class Utilisateur implements Serializable {
     
     
 	// Constructors
-	public Utilisateur() {}
+	public Utilisateur() {
+		super();
+	}
 	
 	public Utilisateur(String pseudo, String nom, String prenom, String email, String telephone, String rue,
 				String codePostal, String ville, String password) {
