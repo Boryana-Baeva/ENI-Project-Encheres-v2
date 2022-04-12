@@ -2,6 +2,8 @@ package fr.eni.encheres.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -107,8 +109,10 @@ public class RegisterServlet extends HttpServlet {
 				dispatcher.forward(request, response);
 			}
 			else if (confirmation.equals(password)) {
+				
+				String encryptedPassword = UtilisateurManager.encrypt(password);
 			
-				user = new Utilisateur(pseudo,nom,prenom,email,telephone,rue,codePostal,ville,password);
+				user = new Utilisateur(pseudo,nom,prenom,email,telephone,rue,codePostal,ville,encryptedPassword);
 				user = UtilisateurManager.register(user);
 				
 				if (user != null) {
@@ -122,8 +126,7 @@ public class RegisterServlet extends HttpServlet {
 					request.setAttribute("erreur", "Aucun utilisateur");
 					dispatcher.forward(request, response);
 				}
-				
-				
+					
 				
 			}
 			

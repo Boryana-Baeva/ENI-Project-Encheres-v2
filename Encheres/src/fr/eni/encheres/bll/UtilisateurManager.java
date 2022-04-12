@@ -1,5 +1,7 @@
 package fr.eni.encheres.bll;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import fr.eni.encheres.exceptions.BusinessException;
@@ -39,6 +41,24 @@ public class UtilisateurManager {
 		return utilisateurDAO.getAllPseudos();
 	}
 	
+	public static Utilisateur login(String pseudo, String password) throws BusinessException{
+		//Valider pseudo utilisateur, verification si il est bien dans la bdd
+		Utilisateur user = null;
+		
+		user = selectUserByPseudo(pseudo);
+		
+		
+		//Si la connexion est reussie
+		if(user!= null && password.equals(user.getPassword())) {
+			return user;
+		
+		} else {
+			throw new BusinessException();
+		}
+			
+		
+	}
+	
 	public static Utilisateur register(Utilisateur utilisateur) throws BusinessException {
 
 		validateUserInfo(utilisateur);
@@ -64,6 +84,44 @@ public class UtilisateurManager {
 		}
 	}
 	
+	public static String encrypt(String password)  {
+		
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		md.update(password.getBytes());
+		byte byteData[] = md.digest();
+		
+		StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < byteData.length; i++) {
+         sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        }
+
+        return sb.toString();
+	}
+	
+	public static Boolean passwordVerify(String passwordPlain, String passwordEncrypted)  {
+			
+			MessageDigest md = null;
+			try {
+				md = MessageDigest.getInstance("SHA-256");
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
+			md.update(passwordPlain.getBytes());
+			byte byteData[] = md.digest();
+			
+			StringBuffer sb = new StringBuffer();
+	        for (int i = 0; i < byteData.length; i++) {
+	         sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+	        }
+	        
+	        return sb.toString().equals(passwordEncrypted);
+		}
+
 	public static void delete(int id) throws BusinessException{
 		utilisateurDAO.delete(id);
 	}

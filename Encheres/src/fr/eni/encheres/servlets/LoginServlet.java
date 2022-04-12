@@ -42,62 +42,59 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//doGet(request, response);
-		
+	
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
        	
 		PrintWriter out= response.getWriter();
-		
 		HttpSession session = request.getSession();
 		
-		String erreur = null;
-		
+		String erreur = null;	
 		String identifiant = request.getParameter("username");
 		String password = request.getParameter("password");
 		
 		
-		if(identifiant.length()==0 || identifiant.isEmpty()){
+		if(identifiant.length() == 0 || identifiant.isEmpty()){
 				
 			//création de l'erreur
-			request.setAttribute("erreur", "pseudo non renseigné. Veuillez le saisir...");
+			session.setAttribute("erreur", "pseudo non renseigné. Veuillez le saisir...");
 			erreur = (String) session.getAttribute("erreur");
 			out.println(erreur);
 			
 			//redirection vers la page de connexion pour saisir le login
-			this.getServletContext().getRequestDispatcher("/login").forward(request, response);
+			//this.getServletContext().getRequestDispatcher("/").forward(request, response);
 			
 			
-		}else if(password.length()==0 || password.isEmpty()) {
+		}else if(password.length() == 0 || password.isEmpty()) {
 				
 			//cr�ation de l'erreur
-			request.setAttribute("erreur", "mot de passe non renseign�. Veuillez le saisir...");
+			session.setAttribute("erreur", "mot de passe non renseign�. Veuillez le saisir...");
 			erreur = (String) session.getAttribute("erreur");
 			out.println(erreur);
+			
 			//redirection vers la page de connexion pour saisir le login
-			this.getServletContext().getRequestDispatcher("/login").forward(request, response);
+			//this.getServletContext().getRequestDispatcher("/").forward(request, response);
 			
 		}else {
 			try {
 				//Valider pseudo utilisateur, verification si il est bien dans la bdd
 				Utilisateur user = UtilisateurManager.selectUserByPseudo(identifiant);
-				//out.println(identifiant);
+
 				//Si la connexion est reussie
-				if(user!= null && password.equals(user.getPassword())) {
-					request.getSession().setAttribute("ConnectedUser", user);
+				if(user!= null && UtilisateurManager.passwordVerify(password, user.getPassword())) {
+					session.setAttribute("ConnectedUser", user);
 					
 					this.getServletContext().getRequestDispatcher("/accueil").forward(request, response);
 					
 				} else {
-					request.getSession().setAttribute("erreur", "Pseudo et/ou mot de passe incorrect(s)! Veuillez ressaisir vos identifiants...");
+					session.setAttribute("erreur", "Pseudo et/ou mot de passe incorrect(s)! Veuillez ressaisir vos identifiants...");
 					erreur = (String) session.getAttribute("erreur");
 					out.println(erreur);
 					
-					this.getServletContext().getRequestDispatcher("/login").forward(request, response);
+					//this.getServletContext().getRequestDispatcher("/").forward(request, response);
 				}
 			} catch (BusinessException e) {
-				request.getSession().setAttribute("erreur", e);
-				this.getServletContext().getRequestDispatcher("/").forward(request, response);
+				session.setAttribute("erreur", e);
+				//this.getServletContext().getRequestDispatcher("/").forward(request, response);
 			}
 		
 		}
