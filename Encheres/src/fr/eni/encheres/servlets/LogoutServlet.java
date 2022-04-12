@@ -33,8 +33,9 @@ public class LogoutServlet extends HttpServlet {
 		session.removeAttribute("ConnectedUser");
 		session.invalidate();
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/homeDisconnected.jsp");
-		dispatcher.forward(request, response);
+		/*RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/homeDisconnected.jsp");
+		dispatcher.forward(request, response);*/
+		this.getServletContext().getRequestDispatcher("/accueil").forward(request, response);
 	}
 
 	/**
