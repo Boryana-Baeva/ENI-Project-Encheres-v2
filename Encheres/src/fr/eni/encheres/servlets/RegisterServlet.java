@@ -119,15 +119,15 @@ public class RegisterServlet extends HttpServlet {
 					HttpSession session = request.getSession();
 					session.setAttribute("ConnectedUser", user);
 					
-					this.getServletContext().getRequestDispatcher("/accueil").forward(request, response);
+					//this.getServletContext().getRequestDispatcher("/").forward(request, response);
+					response.sendRedirect(this.getServletContext().getContextPath() + "/");
 				} 
 				else 
 				{
 					request.setAttribute("erreur", "Aucun utilisateur");
 					dispatcher.forward(request, response);
 				}
-					
-				
+								
 			}
 			
 		}catch (BusinessException e) {

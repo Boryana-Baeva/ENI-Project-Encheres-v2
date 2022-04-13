@@ -10,17 +10,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import fr.eni.encheres.bo.Utilisateur;
+
 /**
- * Servlet implementation class LogoutServlet
+ * Servlet implementation class UserProfileServlet
  */
-@WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
-public class LogoutServlet extends HttpServlet {
+@WebServlet(name = "UserProfileServlet", urlPatterns = { "/profil" })
+public class UserProfileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LogoutServlet() {
+    public UserProfileServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,13 +32,10 @@ public class LogoutServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		session.removeAttribute("ConnectedUser");
-		session.invalidate();
-
-		/*RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/homeDisconnected.jsp");
-		dispatcher.forward(request, response);*/
-		//this.getServletContext().getRequestDispatcher("/accueil").forward(request, response);
-		response.sendRedirect(this.getServletContext().getContextPath() + "/");
+		Utilisateur connectedUser = (Utilisateur) session.getAttribute("ConnectedUser");
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/profile.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	/**

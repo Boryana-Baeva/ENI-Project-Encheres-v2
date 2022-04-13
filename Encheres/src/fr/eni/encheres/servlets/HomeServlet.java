@@ -19,7 +19,7 @@ import fr.eni.encheres.dal.ConnectionProvider;
 /**
  * Servlet implementation class HomeServlet
  */
-@WebServlet(name = "HomeServlet", urlPatterns = { "/accueil" })
+@WebServlet(name = "HomeServlet", urlPatterns = { "/" })
 public class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

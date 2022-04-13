@@ -48,56 +48,26 @@ public class LoginServlet extends HttpServlet {
 		PrintWriter out= response.getWriter();
 		HttpSession session = request.getSession();
 		
-		String erreur = null;	
+		//String erreur = null;	
 		String identifiant = request.getParameter("username");
 		String password = request.getParameter("password");
 		
-		
-		if(identifiant.length() == 0 || identifiant.isEmpty()){
-				
-			//création de l'erreur
-			session.setAttribute("erreur", "pseudo non renseigné. Veuillez le saisir...");
-			erreur = (String) session.getAttribute("erreur");
-			out.println(erreur);
+		try {
+			Utilisateur connectedUser = UtilisateurManager.login(identifiant, password, session, out);
 			
-			//redirection vers la page de connexion pour saisir le login
-			//this.getServletContext().getRequestDispatcher("/").forward(request, response);
-			
-			
-		}else if(password.length() == 0 || password.isEmpty()) {
-				
-			//cr�ation de l'erreur
-			session.setAttribute("erreur", "mot de passe non renseign�. Veuillez le saisir...");
-			erreur = (String) session.getAttribute("erreur");
-			out.println(erreur);
-			
-			//redirection vers la page de connexion pour saisir le login
-			//this.getServletContext().getRequestDispatcher("/").forward(request, response);
-			
-		}else {
-			try {
-				//Valider pseudo utilisateur, verification si il est bien dans la bdd
-				Utilisateur user = UtilisateurManager.selectUserByPseudo(identifiant);
-
-				//Si la connexion est reussie
-				if(user!= null && UtilisateurManager.passwordVerify(password, user.getPassword())) {
-					session.setAttribute("ConnectedUser", user);
-					
-					this.getServletContext().getRequestDispatcher("/accueil").forward(request, response);
-					
-				} else {
-					session.setAttribute("erreur", "Pseudo et/ou mot de passe incorrect(s)! Veuillez ressaisir vos identifiants...");
-					erreur = (String) session.getAttribute("erreur");
-					out.println(erreur);
-					
-					//this.getServletContext().getRequestDispatcher("/").forward(request, response);
-				}
-			} catch (BusinessException e) {
-				session.setAttribute("erreur", e);
+			if(connectedUser != null)
+			{
 				//this.getServletContext().getRequestDispatcher("/").forward(request, response);
+				response.sendRedirect(this.getServletContext().getContextPath() + "/");
 			}
-		
+			
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		
+		
 	}
 
 }

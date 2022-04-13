@@ -1,8 +1,14 @@
 package fr.eni.encheres.bll;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import fr.eni.encheres.exceptions.BusinessException;
 import fr.eni.encheres.bo.Article;
@@ -41,22 +47,48 @@ public class UtilisateurManager {
 		return utilisateurDAO.getAllPseudos();
 	}
 	
-	public static Utilisateur login(String pseudo, String password) throws BusinessException{
-		//Valider pseudo utilisateur, verification si il est bien dans la bdd
+	public static Utilisateur login(String identifiant, String password, HttpSession session, PrintWriter out) throws BusinessException, IOException{
+		
+		String erreur = null;
 		Utilisateur user = null;
 		
-		user = selectUserByPseudo(pseudo);
-		
-		
-		//Si la connexion est reussie
-		if(user!= null && password.equals(user.getPassword())) {
-			return user;
-		
-		} else {
-			throw new BusinessException();
-		}
+		if(identifiant.length() == 0 || identifiant.isEmpty()){
 			
+			//création de l'erreur
+			session.setAttribute("erreur", "pseudo non renseigné. Veuillez le saisir...");
+			erreur = (String) session.getAttribute("erreur");
+			out.println(erreur);
+
+			
+		}else if(password.length() == 0 || password.isEmpty()) {
+				
+			//création de l'erreur
+			session.setAttribute("erreur", "mot de passe non renseign�. Veuillez le saisir...");
+			erreur = (String) session.getAttribute("erreur");
+			out.println(erreur);
+
+			
+		}else {
+			try {
+				//Valider pseudo utilisateur, verification si il est bien dans la bdd
+				user = UtilisateurManager.selectUserByPseudo(identifiant);
+
+				//Si la connexion est reussie
+				if(user!= null && UtilisateurManager.passwordVerify(password, user.getPassword())) {
+					session.setAttribute("ConnectedUser", user);
+					
+				} else {
+					session.setAttribute("erreur", "Pseudo et/ou mot de passe incorrect(s)! Veuillez ressaisir vos identifiants...");
+					erreur = (String) session.getAttribute("erreur");
+					out.println(erreur);
+
+				}
+			} catch (BusinessException e) {
+				session.setAttribute("erreur", e);
+			}
 		
+		}
+		return user;	
 	}
 	
 	public static Utilisateur register(Utilisateur utilisateur) throws BusinessException {
