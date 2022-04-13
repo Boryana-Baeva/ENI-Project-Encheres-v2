@@ -8,6 +8,8 @@
  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
   crossorigin="anonymous"></script>
+  <!--  <link rel="stylesheet" href="styles/style.css">-->
+  <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet">
 <title>Connexion</title>
 </head>
 <body>
@@ -65,7 +67,7 @@
 								<!-- Button Submit  -->
 	                            <div class="col text-center pt-4">
 	                                <button type="submit" id="btn-login" name="btn-login"
-	                                        class="btn btn-primary w-100">Se connecter
+	                                        class="btn btn-custom btn-primary w-100">Se connecter
 	                                </button>
 	                            </div> 
 	                            

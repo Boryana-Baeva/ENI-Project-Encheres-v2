@@ -6,6 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
   crossorigin="anonymous"></script>
   
@@ -30,7 +31,7 @@
 	            <span class="text-black-50"><%=connectedUser.getEmail()%></span>
             </div>
         </div>
-        <div class="col-md-6 border-right">
+        <div class="col-md-7 border-right">
             <div class="p-3 py-5">
             	<div class="card shadow bg-white rounded">
             		<div class="card-header">
@@ -79,11 +80,15 @@
 				</div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="p-3 py-5 d-flex">        
-               <div class="text-center d-inline w-100"><button class="btn btn-warning profile-button" type="button">Modifier</button></div>
-               <div class="text-center d-inline w-100"><button class="btn btn-danger profile-button" type="button">Suprimmer</button></div>
-            </div>
+        <div class="col-md-2">          
+             <div class="text-start mt-5">
+             	<button class="btn btn-custom profile-button" type="button">
+             	<i class="fa-solid fa-pen-to-square"></i> Modifier</button>
+             </div>
+             <div class="text-start mt-2">
+             	<button class="btn btn-danger profile-button" type="button">
+             	<i class="fa-solid fa-trash-can"></i> Suprimmer</button>
+             </div>      
         </div>
     </div>
 </div>
