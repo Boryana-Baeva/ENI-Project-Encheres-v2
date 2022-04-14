@@ -3,6 +3,9 @@ package fr.eni.encheres.bo;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import fr.eni.encheres.bll.RetraitManager;
+import fr.eni.encheres.exceptions.BusinessException;
+
 public class Article implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -19,7 +22,9 @@ public class Article implements Serializable {
 	private EtatVente etatVente;
 	
 	// Constructors
-	public Article() {}
+	public Article() {
+		
+	}
 
 	public Article(String nom, String description, LocalDate dateDebutEncheres, LocalDate dateFinEncheres,
 			int miseAPrix, Utilisateur vendeur, Categorie categorie) {
@@ -193,6 +198,18 @@ public class Article implements Serializable {
 	 */
 	public void setEtatVente(EtatVente etatVente) {
 		this.etatVente = etatVente;
+	}
+	
+	public Retrait getArticleRetrait() {
+
+		Retrait retrait = null; 
+		retrait = RetraitManager.selectionnerRetraitById(this.id);
+		
+		if(retrait == null) {
+			retrait = vendeur.getLieuRetraitParDefaut();
+		}
+		
+		return retrait;
 	}
 	
 	@Override

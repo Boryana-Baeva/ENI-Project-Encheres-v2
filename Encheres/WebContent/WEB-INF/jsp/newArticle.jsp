@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="fr.eni.encheres.bll.CategorieManager"%>
+<%@page import="fr.eni.encheres.bo.Categorie"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -31,6 +33,7 @@
 		                 <div class="card-title fw-bold fs-4">Nouvelle vente</div>
 		             </div>
 	  				<div class="card-body">
+	  				<form class="vente" action="<%=request.getContextPath() %>/vendre" method="POST">
 		  				<div class="row">
 		  					<div class="col">
 			  					<div class="row mt-3">
@@ -40,7 +43,7 @@
 				                </div>
 				                <div class="row mt-3">
 				                 	<div class="col text-muted"><label class="labels">Description</label>
-				                    	<textarea class="form-control" name="description" placeholder="Description..." rows="4" cols="50"></textarea>
+				                    	<textarea class="form-control" name="description" placeholder="Description..." rows="11" cols="50"></textarea>
 				                    </div>
 			                	</div>
 			  				</div>
@@ -49,10 +52,9 @@
 				                    <div class="col-8">
 				                    	<label class="labels text-muted">Catégorie</label>
 				                    	<select class="form-select" aria-label="categories" name="category">
-										  <option selected>Choisir une catégorie</option>
-										  <option value="1">Catégorie 1</option>
-										  <option value="2">Catégorie 2</option>
-										  <option value="3">Catégorie 3</option>
+										  <% for(Categorie categorie : CategorieManager.getAll()) { %>
+								            <option name="categorie" value ="<%=categorie.getId()%>"><%=categorie.getLibelle()%></option>
+								           <% } %>
 										</select>
 									</div>
 				                    <div class="col-4">
@@ -68,14 +70,33 @@
 				                 		<label class="labels text-muted">Fin de l'enchère</label><input type="date" class="form-control" name="date-end">
 				                 	</div>
 			                 	</div>   
+			                 	
+			                 	<hr class="card-title mt-5">
+			                 	<div class="card-title text-center text-muted fs-5">Lieu de retrait</div>
+			                 	<div class="row mt-3">
+				                 	<div class="col">
+				                 		<label class="labels text-muted">Adresse</label>
+				                 		<input type="text" class="form-control" name="rue">
+				                 	</div>
+			                 	</div> 
+			                 	<div class="row mt-3">
+									<div class="col-8">
+				                 		<label class="labels text-muted">Ville</label>
+				                 		<input type="text" class="form-control" name="ville">
+				                 	</div>
+				                 	<div class="col-4">
+				                 		<label class="labels text-muted">Code Postal</label>
+				                 		<input type="text" class="form-control" name="code-postal">
+				                 	</div>  	
+			                 	</div> 
 			  				</div>
 		  				</div>
 		  				
 		                <div class="row mt-5">
-		                 	<div class="col text-end"><button class="btn btn-custom profile-button" type="button">Enregistrer</button></div>
-		                	<div class="col text-start"><button class="btn btn-secondary profile-button" type="button">Annuler</button></div>
+		                 	<div class="col text-end"><button class="btn btn-custom profile-button w-50" type="submit">Enregistrer</button></div>
+		                	<div class="col text-start"><button class="btn btn-secondary profile-button w-50" type="button">Annuler</button></div>
 		                </div>
-			                            
+			         </form>                   
 			       </div>
 		        </div>
 	  		</div>

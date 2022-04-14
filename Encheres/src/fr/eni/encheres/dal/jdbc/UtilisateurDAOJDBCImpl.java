@@ -31,7 +31,7 @@ public class UtilisateurDAOJDBCImpl implements UtilisateurDAO {
 	private static final String DELETE = "DELETE UTILISATEURS WHERE no_utilisateur=?";
 	private static final String GET_ALL_UTILISATEUR_ARTICLES = "SELECT * FROM ARTICLES_VENDUS WHERE no_utilisateur=?";
 	private static final String GET_ALL_PSEUDOS = "SELECT pseudo FROM UTILISATEURS";
-	
+
 	
 	//private static EnchereDAO enchereDao = new EnchereDAOJDBCImpl();
 	//private static ArticleDAO articleDao = new ArticleVenduDAOJDBCImpl();

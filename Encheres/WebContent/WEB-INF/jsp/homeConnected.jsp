@@ -1,5 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="java.time.LocalDate"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.util.List"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="fr.eni.encheres.bll.ArticleManager"%>
+<%@page import="fr.eni.encheres.bll.CategorieManager"%>
+<%@page import="fr.eni.encheres.bo.Categorie"%>
+<%@page import="fr.eni.encheres.bo.Article"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -33,11 +42,10 @@
 					<p class="text-muted">Catégories</p>
 				</div>
 				<div class="col-9">
-					<select class="form-select" aria-label="Default select example">
-					  <option selected>Selectionner une catégorie</option>
-					  <option value="1">Toutes</option>
-					  <option value="2">Catégorie 1</option>
-					  <option value="3">Catégorie 2</option>
+					<select class="form-select" aria-label="Default select example"> 
+					  <% for(Categorie categorie : CategorieManager.getAll()) { %>
+			            <option name="categorie" value ="<%=categorie.getId()%>"><%=categorie.getLibelle()%></option>
+			            <% } %>
 					</select>
 				</div>
 			</div>
@@ -114,122 +122,55 @@
 	</div>
 
     <div class="card-grid row">
-       
-       <div class="col-6 my-3">
-	       <div class="card shadow bg-white rounded">
-	             <div class="card-header">
-	                 <div class="card-title">Article<a href="#"></a></div>
-	             </div>
-	             <div class="row">
-	             	<div class="col-3">
-		             	<div class="card-img">
-			                  <img class="rounded-circle" width="150px" src="https://www.arraymedical.com/wp-content/uploads/2018/12/product-image-placeholder.jpg">
-			             </div>
+    
+     <% List<Article> listeArticles = ArticleManager.getAll(); %>
+     <% if(listeArticles.size() != 0) { %>
+   			<% for(Article article : listeArticles) { %> 
+		      <div class="col-6 my-3">
+		       <div class="card shadow bg-white rounded card-article">
+		             <div class="card-header">
+		                 <div class="card-title">
+		                 <a href="<%=request.getContextPath()%>/article?id=<%=article.getId() %>" class="link-custom">
+		                 <%=article.getNom()%></a>
+		                 </div>
 		             </div>
-		             <div class="col-9">
-			             <div class="card-body">
-			                 <div class="prix">
-			                 	<p><i class="fa-solid fa-tag text-secondary"></i><span class="text-muted"> Prix:</span>100</p>
-			                 </div>
-			                 
-			                 <div class="card-date-enchere">
-			                     <p><i class="fa-solid fa-calendar-check text-secondary"></i><span class="text-muted"> Fin de l'enchère:</span> 22/04/2022</p>
-			                 </div>
-			                 <div class="vendeur">
-			                     <p><i class="fa-solid fa-user text-secondary"></i><span class="text-muted"> Vendeur:</span> yana1</p>
-			                 </div>
+		             <div class="row">
+		             	<div class="col-3">
+			             	<div class="card-img">
+				                  <img class="rounded-circle" width="150px" src="https://www.arraymedical.com/wp-content/uploads/2018/12/product-image-placeholder.jpg">
+				             </div>
 			             </div>
-			         </div>
-	             </div>             
-	         </div>
-       </div>
+			             <div class="col-9">
+				             <div class="card-body">
+				                 <div class="prix">
+				                 	<p><i class="fa-solid fa-tag text-secondary"></i><span class="text-muted"> Mise à prix: </span><%=article.getMiseAPrix()%> crédits</p>
+				                 </div>
+				                 <% if(article.getPrixVente() != 0) { %> 
+			                   	 	<div class="prix">
+					                 	<p><i class="fa-solid fa-tag text-secondary"></i><span class="text-muted"> Prix vente: </span><%=article.getPrixVente()%> crédits</p>
+					                 </div>
+			                   	 <%} %>
+				                 
+				                 <div class="card-date-enchere">
+				                     <p><i class="fa-solid fa-calendar-check text-secondary"></i><span class="text-muted"> Fin de l'enchère: </span> <%=article.getDateDebutEncheres().format(DateTimeFormatter.ofPattern("dd/MM/YYYY", Locale.FRANCE))%></p>
+				                 </div>
+				                 <div class="vendeur">
+				                     <p><i class="fa-solid fa-user text-secondary"></i><span class="text-muted"> Vendeur: </span> 
+				                     <a href="<%=request.getContextPath()%>/profil?id=<%=article.getVendeur().getId() %>"
+				                     class="z-index"><%=article.getVendeur().getPseudo()%></a>
+				                     </p>
+				                 </div>
+				             </div>
+				         </div>
+		             </div>             
+		         </div>
+		      </div>
+   	       <% } %>    
+	   <% } else { %>
+           <h1>Aucun article</h1>
+       <% } %>
            
-       <div class="col-6 my-3">
-	       <div class="card shadow bg-white rounded">
-	             <div class="card-header">
-	                 <div class="card-title">Article<a href="#"></a></div>
-	             </div>
-	             <div class="row">
-	             	<div class="col-3">
-		             	<div class="card-img">
-			                  <img class="rounded-circle" width="150px" src="https://www.arraymedical.com/wp-content/uploads/2018/12/product-image-placeholder.jpg">
-			             </div>
-		             </div>
-		             <div class="col-9">
-			             <div class="card-body">
-			                 <div class="prix">
-			                 	<p><i class="fa-solid fa-tag text-secondary"></i><span class="text-muted"> Prix:</span>100</p>
-			                 </div>
-			                 
-			                 <div class="card-date-enchere">
-			                     <p><i class="fa-solid fa-calendar-check text-secondary"></i><span class="text-muted"> Fin de l'enchère:</span> 22/04/2022</p>
-			                 </div>
-			                 <div class="vendeur">
-			                     <p><i class="fa-solid fa-user text-secondary"></i><span class="text-muted"> Vendeur:</span> yana1</p>
-			                 </div>
-			             </div>
-			         </div>
-	             </div>             
-	         </div>
-       </div>
        
-       <div class="col-6 my-3">
-	       <div class="card shadow bg-white rounded">
-	             <div class="card-header">
-	                 <div class="card-title">Article<a href="#"></a></div>
-	             </div>
-	             <div class="row">
-	             	<div class="col-3">
-		             	<div class="card-img">
-			                  <img class="rounded-circle" width="150px" src="https://www.arraymedical.com/wp-content/uploads/2018/12/product-image-placeholder.jpg">
-			             </div>
-		             </div>
-		             <div class="col-9">
-			             <div class="card-body">
-			                 <div class="prix">
-			                 	<p><i class="fa-solid fa-tag text-secondary"></i><span class="text-muted"> Prix:</span>100</p>
-			                 </div>
-			                 
-			                 <div class="card-date-enchere">
-			                     <p><i class="fa-solid fa-calendar-check text-secondary"></i><span class="text-muted"> Fin de l'enchère:</span> 22/04/2022</p>
-			                 </div>
-			                 <div class="vendeur">
-			                     <p><i class="fa-solid fa-user text-secondary"></i><span class="text-muted"> Vendeur:</span> yana1</p>
-			                 </div>
-			             </div>
-			         </div>
-	             </div>             
-	         </div>
-       </div>
-       
-       <div class="col-6 my-3">
-	       <div class="card shadow bg-white rounded">
-	             <div class="card-header">
-	                 <div class="card-title">Article<a href="#"></a></div>
-	             </div>
-	             <div class="row">
-	             	<div class="col-3">
-		             	<div class="card-img">
-			                  <img class="rounded-circle" width="150px" src="https://www.arraymedical.com/wp-content/uploads/2018/12/product-image-placeholder.jpg">
-			             </div>
-		             </div>
-		             <div class="col-9">
-			             <div class="card-body">
-			                 <div class="prix">
-			                 	<p><i class="fa-solid fa-tag text-secondary"></i><span class="text-muted"> Prix:</span>100</p>
-			                 </div>
-			                 
-			                 <div class="card-date-enchere">
-			                     <p><i class="fa-solid fa-calendar-check text-secondary"></i><span class="text-muted"> Fin de l'enchère:</span> 22/04/2022</p>
-			                 </div>
-			                 <div class="vendeur">
-			                     <p><i class="fa-solid fa-user text-secondary"></i><span class="text-muted"> Vendeur:</span> yana1</p>
-			                 </div>
-			             </div>
-			         </div>
-	             </div>             
-	         </div>
-       </div>
     </div>
 </div>
 </body>

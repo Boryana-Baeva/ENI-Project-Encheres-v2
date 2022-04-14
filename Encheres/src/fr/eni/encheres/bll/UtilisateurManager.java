@@ -22,6 +22,7 @@ public class UtilisateurManager {
 	private static UtilisateurDAO utilisateurDAO = new UtilisateurDAOJDBCImpl();
 	private static Utilisateur utilisateur = new Utilisateur();
 	private static BusinessException businessException = new BusinessException();
+	private static final int DEFAULT_CREDIT = 150;
 	
 	public UtilisateurManager() {
 		UtilisateurManager.utilisateurDAO = DAOFactory.getUtilisateurDAO();
@@ -94,6 +95,8 @@ public class UtilisateurManager {
 	public static Utilisateur register(Utilisateur utilisateur) throws BusinessException {
 
 		validateUserInfo(utilisateur);
+		
+		utilisateur.setCredit(DEFAULT_CREDIT);
 
 		if (!businessException.hasErreurs()) {
 			utilisateurDAO.insert(utilisateur);

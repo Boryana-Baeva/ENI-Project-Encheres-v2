@@ -18,6 +18,7 @@ import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Retrait;
 import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.exceptions.BusinessException;
 
 /**
  * Servlet implementation class NewArticleServlet
@@ -56,36 +57,37 @@ public class NewArticleServlet extends HttpServlet {
 			LocalDate dateFinEncheres = LocalDate.parse(request.getParameter("date-end"));
 			int miseAPrix = Integer.parseInt(request.getParameter("initial-price"));
 			int categerieId = Integer.parseInt(request.getParameter("category"));
-			/*String rue = request.getParameter("rue");
-			String codePostal = request.getParameter("codePostal");
-			String ville = request.getParameter("ville");*/
-			
-			//Categorie categorie = CategorieManager.selectionnerCategorieById(categerieId);
+				
+			Categorie categorie = CategorieManager.getById(categerieId);
 			Utilisateur utilisateur = (Utilisateur) session.getAttribute("ConnectedUser");
-			/*Retrait retrait = new Retrait();
-				
-			retrait = new Retrait();
-			retrait.setRue(rue);
-			retrait.setCodePostal(codePostal);
-			retrait.setVille(ville);*/
-				
-			//RetraitManager.ajouterLieuRetrait(retrait);				
 			
 			article.setNom(nom);
 			article.setDescription(description);
 			article.setDateDebutEncheres(dateDebutEncheres);
 			article.setDateFinEncheres(dateFinEncheres);
 			article.setMiseAPrix(miseAPrix);
-			//article.setCategorie(categorie);
-			//article.setLieuRetrait(retrait);
+			article.setCategorie(categorie);
 			article.setVendeur(utilisateur);
 			
-			//ArticleManager.nouvelleVente(article);
+			ArticleManager.insert(article);
 			
-			//request.setAttribute("ArticleAffiche", article);
-			//this.getServletContext().getRequestDispatcher("/accueilConnected").forward(request, response);
+			if(request.getParameter("rue") != null &&
+					request.getParameter("code-postal") != null &&
+					request.getParameter("ville") != null) {
+				
+				Retrait retrait = new Retrait();
+				retrait.setRue(request.getParameter("rue"));
+				retrait.setCodePostal(request.getParameter("code-postal"));
+				retrait.setVille(request.getParameter("ville"));
+				retrait.setId(article.getId());
+				
+				RetraitManager.insert(retrait);
+						
+			}
 			
-		} catch (Exception e) {
+			response.sendRedirect(this.getServletContext().getContextPath() + "/");
+			
+		} catch (BusinessException e) {
 			e.printStackTrace();
 		}
 	}
