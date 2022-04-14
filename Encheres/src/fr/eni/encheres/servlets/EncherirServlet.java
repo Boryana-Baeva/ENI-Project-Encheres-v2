@@ -2,6 +2,7 @@ package fr.eni.encheres.servlets;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -56,24 +57,35 @@ public class EncherirServlet extends HttpServlet {
 			Article article = null;
 			try {
 				article = ArticleManager.getById(idArticle);
-			} catch (BusinessException e1) {
-				e1.printStackTrace();
+			} catch (BusinessException e) {
+				e.printStackTrace();
 			}
 			 
 			
 			if (article != null && prixEnchere > article.getMiseAPrix() && connectedUser.getCredit() >= prixEnchere) {
 				Enchere enchere = new Enchere(LocalDate.now(), prixEnchere, article, connectedUser);
 				article.setPrixVente(prixEnchere);
-						
+								
 				try {
 					EnchereManager.insert(enchere);
 					ArticleManager.update(article);
+					
+					connectedUser.setCredit(currentCredit - prixEnchere);
+					UtilisateurManager.update(connectedUser);
+					
+					if(EnchereManager.getAllByArticle(article.getId()) != null) {
+						List<Enchere> encheres = EnchereManager.getAllByArticle(article.getId());
+						Enchere previousEnchere = encheres.get(encheres.size()-1);
+						Utilisateur previousEncherisseur =  previousEnchere.getEncherisseur();
+						
+						previousEncherisseur.setCredit(previousEncherisseur.getCredit() + previousEnchere.getMontant());
+						UtilisateurManager.update(previousEncherisseur);
+					}
 	
 				} catch (BusinessException e) {
 					e.printStackTrace();
 				}
-				
-				//request.getRequestDispatcher("/WEB-INF/jsp/homeConnected.jsp").forward(request, response);
+
 				response.sendRedirect(this.getServletContext().getContextPath() + "/article?id=" + idArticle);
 			}
 			

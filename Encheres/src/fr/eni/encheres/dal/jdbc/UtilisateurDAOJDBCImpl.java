@@ -13,6 +13,7 @@ import fr.eni.encheres.exceptions.BusinessException;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.codes.ErrorCodes;
+import fr.eni.encheres.dal.ArticleDAO;
 import fr.eni.encheres.dal.ConnectionProvider;
 //import fr.eni.encheres.dal.ArticleDAO;
 //import fr.eni.encheres.dal.CategorieDAO;
@@ -31,10 +32,9 @@ public class UtilisateurDAOJDBCImpl implements UtilisateurDAO {
 	private static final String DELETE = "DELETE UTILISATEURS WHERE no_utilisateur=?";
 	private static final String GET_ALL_UTILISATEUR_ARTICLES = "SELECT * FROM ARTICLES_VENDUS WHERE no_utilisateur=?";
 	private static final String GET_ALL_PSEUDOS = "SELECT pseudo FROM UTILISATEURS";
-
 	
 	//private static EnchereDAO enchereDao = new EnchereDAOJDBCImpl();
-	//private static ArticleDAO articleDao = new ArticleVenduDAOJDBCImpl();
+	private static ArticleDAO articleDao = new ArticleDAOJDBCImpl();
 	//private static CategorieDAO categorieDao = new CategorieDAOJDBCImpl();
 	//private static RetraitDAO retraitDao = new RetraitDAOJDBCImpl();
 	
@@ -226,11 +226,11 @@ public class UtilisateurDAOJDBCImpl implements UtilisateurDAO {
 			PreparedStatement statement = connection.prepareStatement(DELETE);
 			statement.setInt(1, id);
 			
-			/*List<Article> listeArticles=articleDao.getByVendeur(id);
+			List<Article> listeArticles= articleDao.getByVendeur(id);
 			
 			for (Article article : listeArticles) {
 				articleDao.delete(article.getId());
-			}*/
+			}
 			
 			statement.executeUpdate();
 

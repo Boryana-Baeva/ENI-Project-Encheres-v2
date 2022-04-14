@@ -194,4 +194,33 @@ public class ArticleDAOJDBCImpl implements ArticleDAO {
 		}
 		return categorieArticle;
 	}
+	
+	@Override
+	public List<Article> getByVendeur(int id) throws BusinessException {
+
+		List<Article> articles = new ArrayList<>();
+
+		try (Connection connection = ConnectionProvider.getConnection()) {
+			PreparedStatement statement = connection.prepareStatement(GET_BY_VENDEUR);
+			statement.setInt(1, id);
+
+			ResultSet rs = statement.executeQuery();
+
+			Article articleVendu = null;
+
+			while (rs.next()) {
+				articleVendu = articleBuilder(rs);
+				articles.add(articleVendu);
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.GET_ARTICLES_FAIL);
+			throw businessException;
+
+		}
+		return articles;
+	}
 }

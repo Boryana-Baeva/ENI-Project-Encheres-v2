@@ -160,4 +160,27 @@ public class UtilisateurManager {
 	public static void delete(int id) throws BusinessException{
 		utilisateurDAO.delete(id);
 	}
+	
+	public static void update(Utilisateur utilisateur) throws BusinessException {
+
+		validateInfo(utilisateur, businessException);
+
+		if (!businessException.hasErreurs()) {
+			utilisateurDAO.update(utilisateur);
+
+		}
+
+	}
+
+	private static void validateInfo(Utilisateur utilisateur, BusinessException businessException) {
+
+		if ( utilisateur.getNom().trim().equals("")
+				|| utilisateur.getPrenom().trim().equals("") || utilisateur.getEmail().trim().equals("")
+				|| utilisateur.getRue().trim().equals("") || utilisateur.getCodePostal().trim().equals("")
+				|| utilisateur.getVille().trim().equals("") || utilisateur.getPassword().trim().equals("")) {
+			
+			businessException.ajouterErreur(CodesResultatBLL.REGLE_UTILISATEURS_COORDONNEES_ERREUR);
+		}
+
+	}
 }

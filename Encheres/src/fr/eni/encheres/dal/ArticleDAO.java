@@ -16,6 +16,8 @@ public interface ArticleDAO {
 	public void update(Article article) throws BusinessException;
 	
 	public void delete(int id) throws BusinessException;
+
+	List<Article> getByVendeur(int id) throws BusinessException;
 	
 	
 	
