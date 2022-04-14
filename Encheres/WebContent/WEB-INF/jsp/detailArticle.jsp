@@ -2,11 +2,15 @@
     pageEncoding="UTF-8"%>
 <%@page import="fr.eni.encheres.bo.Article"%>
 <%@page import="fr.eni.encheres.bo.Retrait"%>
+<%@page import="fr.eni.encheres.bo.Enchere"%>
 <%@page import="fr.eni.encheres.bo.Utilisateur"%>
 <%@page import="fr.eni.encheres.bll.RetraitManager"%>
+<%@page import="fr.eni.encheres.bll.EnchereManager"%>
 <%@page import="java.time.LocalDate"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.util.List"%>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -55,7 +59,9 @@
 			                	</div>
 			                	<div class="row mt-3">
 				                 	<div class="col"><label class="labels text-muted">Vendeur: </label>
-				                    	<p class="card-text"><%=article.getVendeur().getPseudo() %></p>
+				                    	<p class="card-text">
+				                    	<a href="<%=request.getContextPath()%>/profil?id=<%=article.getVendeur().getId() %>">
+				                    	<%=article.getVendeur().getPseudo() %></a></p>
 				                    </div>
 			                	</div>
 			                	
@@ -112,7 +118,9 @@
 		  				
 		  				<% if( session.getAttribute("ConnectedUser") != null){ 
 	  						Utilisateur connectedUser = (Utilisateur) session.getAttribute("ConnectedUser");
-	  					    if(!article.getVendeur().getPseudo().equals(connectedUser.getPseudo())) { %>
+	  					    if(!article.getVendeur().getPseudo().equals(connectedUser.getPseudo()) 
+	  					    		&& !LocalDate.now().isBefore(article.getDateDebutEncheres())
+	  					    		&& !LocalDate.now().isAfter(article.getDateFinEncheres()) ) { %>
 	  					    
 		  					<% Integer minPrixEnchere = null;
 		  					  if(article.getPrixVente() != 0) { 
@@ -121,7 +129,7 @@
                     	      	 minPrixEnchere = Integer.valueOf(article.getMiseAPrix());
                     	      } %>
 				                    	      
-								<form action="<%=request.getContextPath()%>/encherir" method="post">
+								<form action="<%=request.getContextPath()%>/encherir?idArticle=<%=article.getId()%>" method="POST">
 									<div class="row mt-5">
 										<div class="col-3">
 					                    	<label class="labels text-muted">Ma Proposition :</label>
@@ -130,14 +138,35 @@
 									    <div class="col mt-4">
 									        <button class="btn btn-custom btn-encherir" type="submit">Enchérir</button>
 									    </div>
-								      	<input value="<%=article.getId()%>" type="text" id="idArticle" name="idArticle" style="visibility:hidden;">
+								      	<!--  <input value="<%=article.getId()%>" type="text" id="idArticle" name="idArticle" style="visibility:hidden;">-->
 									</div>
 								</form>
 							
 							<% } %>
 						<% } %>
-		  				
+						
+										
+						<% if(EnchereManager.getAllByArticle(article.getId()) != null) { 
+							List<Enchere> encheres = EnchereManager.getAllByArticle(article.getId());%>
+								<ul class="list-group mt-4">
+								<% for(Enchere enchere : encheres) { %>
+								  	<li class="list-group-item">
+								  	<span class="fw-bold"><%= enchere.getDate().format(DateTimeFormatter.ofPattern("dd/MM/YYYY", Locale.FRANCE)) %> :</span> enchère pour 
+								  	<span class="fw-bold"><%=enchere.getMontant()%> crédits </span> par 
+								  	<a href="<%=request.getContextPath()%>/profil?id=<%=enchere.getEncherisseur().getId() %>">
+								  	<%=enchere.getEncherisseur().getPseudo()%></a> 
+								  	
+								  	</li>
+								 <% }%> 
+								</ul>
+						<% } else if(EnchereManager.getAllByArticle(article.getId()).size() == 0) { %>
+							<ul class="list-group">
+							  <li class="list-group-item">Aucune enchère pour cet article</li>
+							</ul>
+		  				<% } %>
                 
+    
+		  				
 			       </div>
 		        </div>
 	  		</div>

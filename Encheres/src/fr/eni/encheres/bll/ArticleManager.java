@@ -20,7 +20,6 @@ public class ArticleManager {
 	private static ArticleDAO articleDAO = new ArticleDAOJDBCImpl();
 	private static RetraitDAO retraitDAO = new RetraitDAOJDBCImpl();
 	private static Article article = new Article();
-	private static EtatVente etatVente;
 			
 	private static BusinessException businessException = new BusinessException();
 	
@@ -57,10 +56,23 @@ public class ArticleManager {
 		
 		return article;
 	}
+	
+	public static void update(Article article) throws BusinessException{
+		
+		validateDate(article);
+		
+		if(!businessException.hasErreurs())
+		{
+			articleDAO.update(article);
+		} else {
+			businessException.printStackTrace();	
+		}
+	
+	}
 
 	private static void validateDate(Article article) {
 		
-		if (article.getDateDebutEncheres() == null || article.getDateFinEncheres() == null || article.getDateDebutEncheres().isBefore(LocalDate.now()) ||
+		if (article.getDateDebutEncheres() == null || article.getDateFinEncheres() == null || LocalDate.now().isBefore(article.getDateDebutEncheres()) ||
 				article.getDateFinEncheres().isBefore(article.getDateDebutEncheres())) 
 		{
 			businessException.ajouterErreur(CodesResultatBLL.REGLE_ENCHERES_DATE_ERREUR);

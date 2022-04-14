@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +27,11 @@ public class ArticleDAOJDBCImpl implements ArticleDAO {
 	private static final String GET_BY_ID = "select * from ARTICLES_VENDUS where no_article= ?";
 	private static final String GET_BY_VENDEUR = "select * from ARTICLES_VENDUS where no_utilisateur= ?";
 	private static final String INSERT = "insert into ARTICLES_VENDUS (nom_article, description, date_debut_encheres, date_fin_encheres,prix_initial,no_utilisateur,no_categorie) VALUES (?,?,?,?,?,?,?)";
-	private static final String UPDATE = "update ARTICLES_VENDUS set nom_article = ?, description = ?,"
+	private static final String UPDATE = "UPDATE ARTICLES_VENDUS SET nom_article = ?, description = ?,"
 			+ "							 date_debut_encheres=?, date_fin_encheres= ?, prix_initial= ?, prix_vente= ?, "
-			+ "							 no_utilisateur= ?, no_categorie=?, no_retrait=? where no_article= ? ";
+			+ "							 no_utilisateur= ?, no_categorie=? where no_article= ? ";
 	private static final String DELETE = "delete ARTICLES_VENDUS where no_article = ?";
-	private static final String GET_BY_RETRAIT = "select * from ARTICLES_VENDUS where no_retrait=?";
+
 
 	
 	public Article articleBuilder(ResultSet rs) throws BusinessException, SQLException {
@@ -120,7 +121,6 @@ public class ArticleDAOJDBCImpl implements ArticleDAO {
 			statement.setInt(5, article.getMiseAPrix());
 			statement.setInt(6, article.getVendeur().getId());
 			statement.setInt(7, article.getCategorie().getId());
-			//statement.setInt(8, article.getLieuRetrait().getId());
 
 			statement.executeUpdate();
 
@@ -141,7 +141,29 @@ public class ArticleDAOJDBCImpl implements ArticleDAO {
 
 	@Override
 	public void update(Article article) throws BusinessException {
-		// TODO Auto-generated method stub
+		try (Connection connection = ConnectionProvider.getConnection()) {
+
+			PreparedStatement statement = connection.prepareStatement(UPDATE);
+
+			statement.setString(1, article.getNom());
+			statement.setString(2, article.getDescription());
+			statement.setDate(3, java.sql.Date.valueOf(article.getDateDebutEncheres()));
+			statement.setDate(4, java.sql.Date.valueOf(article.getDateFinEncheres()));
+			statement.setInt(5, article.getMiseAPrix());
+			statement.setInt(6, article.getPrixVente());
+			statement.setInt(7, article.getVendeur().getId());
+			statement.setInt(8, article.getCategorie().getId());
+			statement.setInt(9, article.getId());
+
+			statement.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.UPDATE_OBJECT_FAIL);
+			throw businessException;
+
+		}
 		
 	}
 

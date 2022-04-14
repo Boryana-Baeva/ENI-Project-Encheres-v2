@@ -147,9 +147,13 @@
 				                 </div>
 				                 <% if(article.getPrixVente() != 0) { %> 
 			                   	 	<div class="prix">
-					                 	<p><i class="fa-solid fa-tag text-secondary"></i><span class="text-muted"> Prix vente: </span><%=article.getPrixVente()%> crédits</p>
+					                 	<p><i class="fa-solid fa-tag text-secondary"></i><span class="text-muted"> Prix actuel: </span><%=article.getPrixVente()%> crédits</p>
 					                 </div>
-			                   	 <%} %>
+			                   	 <%} else { %>
+			                   	 	 <div class="prix">
+					                 	<p><i class="fa-solid fa-tag text-secondary"></i><span class="text-muted"> Prix actuel: </span><%=article.getMiseAPrix()%> crédits</p>
+					                 </div>
+			                   	 <%}  %>
 				                 
 				                 <div class="card-date-enchere">
 				                     <p><i class="fa-solid fa-calendar-check text-secondary"></i><span class="text-muted"> Fin de l'enchère: </span> <%=article.getDateDebutEncheres().format(DateTimeFormatter.ofPattern("dd/MM/YYYY", Locale.FRANCE))%></p>
