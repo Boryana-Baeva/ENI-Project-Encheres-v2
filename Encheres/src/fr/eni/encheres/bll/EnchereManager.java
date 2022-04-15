@@ -5,6 +5,7 @@ import fr.eni.encheres.exceptions.BusinessException;
 import java.time.LocalDate;
 import java.util.List;
 
+import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.dal.EnchereDAO;
 import fr.eni.encheres.dal.jdbc.EnchereDAOJDBCImpl;
@@ -16,6 +17,11 @@ public class EnchereManager {
 	public EnchereManager() {
 		businessException = new BusinessException();
 	}
+	
+	public static Enchere getById(int userId, int articleId)throws BusinessException{
+		return enchereDAO.getById(userId, articleId);	
+	}
+	
 	
 	public static Enchere insert (Enchere enchere) throws BusinessException {
 

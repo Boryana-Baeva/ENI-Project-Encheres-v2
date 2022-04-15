@@ -37,9 +37,34 @@ public class EnchereDAOJDBCImpl implements EnchereDAO {
 	}
 
 	@Override
-	public Enchere getById(int id) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+	public Enchere getById(int userId, int articleId) throws BusinessException {
+		Enchere enchere = null;
+		
+		try (Connection connection = ConnectionProvider.getConnection()) {
+			PreparedStatement statement = connection.prepareStatement(GET_BY_ID);
+			statement.setInt(1, userId);
+			statement.setInt(2, articleId);
+			ResultSet rs = statement.executeQuery();
+			
+			if(rs.next()) 
+			{
+				enchere = new Enchere();
+				enchere.setDate(rs.getDate("date_enchere").toLocalDate());
+				enchere.setMontant(rs.getInt("montant_enchere"));
+				enchere.setArticle(articleDao.getById(rs.getInt("no_article")));
+				enchere.setEncherisseur(utilisateurDAO.getById(rs.getInt("no_utilisateur")));
+				
+			}
+						
+		} catch (Exception e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.GET_ENCHERE_FAIL);
+			throw businessException;
+
+		}
+				
+		return enchere;
 	}
 
 	@Override

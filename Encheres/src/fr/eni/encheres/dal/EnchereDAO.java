@@ -9,7 +9,7 @@ public interface EnchereDAO {
 	
 	public List<Enchere> getAll() throws BusinessException;
 	
-	public Enchere getById(int id) throws BusinessException;
+	public Enchere getById(int userId, int articleId) throws BusinessException;
 	
 	public Enchere insert(Enchere enchere) throws BusinessException;
 	

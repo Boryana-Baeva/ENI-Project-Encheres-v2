@@ -201,7 +201,7 @@
 		                 <div class="card-title fw-bold fs-4"><i class='fas fa-exclamation-triangle'></i> Accès restreint</div>
 		             </div>
 	  				<div class="card-body">
-	  				    <p><span class="test-muted fw-bold">Désolé.</span> Vous n'avez pas l'autorisation d'accéder à cette page.</p>
+	  				    <p><span class="test-muted fw-bold">Désolé.</span> Vous n'avez pas l'accès à cette page.</p>
 	  				    <p>Veuillez vous connecter afin de pouvoir la consulter. <a href="<%=request.getContextPath()%>/login">Connexion</a></p>
 			       </div>
 		        </div>
