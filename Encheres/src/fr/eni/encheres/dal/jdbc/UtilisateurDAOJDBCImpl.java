@@ -14,7 +14,11 @@ import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.codes.ErrorCodes;
 import fr.eni.encheres.dal.ArticleDAO;
+import fr.eni.encheres.dal.CategorieDAO;
+import fr.eni.encheres.dal.CodesResultatDAL;
 import fr.eni.encheres.dal.ConnectionProvider;
+import fr.eni.encheres.dal.EnchereDAO;
+import fr.eni.encheres.dal.RetraitDAO;
 //import fr.eni.encheres.dal.ArticleDAO;
 //import fr.eni.encheres.dal.CategorieDAO;
 //import fr.eni.encheres.dal.EnchereDAO;
@@ -33,10 +37,10 @@ public class UtilisateurDAOJDBCImpl implements UtilisateurDAO {
 	private static final String GET_ALL_UTILISATEUR_ARTICLES = "SELECT * FROM ARTICLES_VENDUS WHERE no_utilisateur=?";
 	private static final String GET_ALL_PSEUDOS = "SELECT pseudo FROM UTILISATEURS";
 	
-	//private static EnchereDAO enchereDao = new EnchereDAOJDBCImpl();
+	private static EnchereDAO enchereDao = new EnchereDAOJDBCImpl();
 	private static ArticleDAO articleDao = new ArticleDAOJDBCImpl();
-	//private static CategorieDAO categorieDao = new CategorieDAOJDBCImpl();
-	//private static RetraitDAO retraitDao = new RetraitDAOJDBCImpl();
+	private static CategorieDAO categorieDao = new CategorieDAOJDBCImpl();
+	private static RetraitDAO retraitDao = new RetraitDAOJDBCImpl();
 	
 	/**
 	 * Creates a new user from a ResultSet
@@ -246,36 +250,36 @@ public class UtilisateurDAOJDBCImpl implements UtilisateurDAO {
 	@Override
 	public List<Article> getAllUtilisateurArticles(Utilisateur utilisateur) throws BusinessException {
 		
-		/*List<ArticleVendu> listeArticlesVendus = new ArrayList<ArticleVendu>();
+		List<Article> listeArticlesVendus = new ArrayList<Article>();
 
 		try (Connection connection = ConnectionProvider.getConnection()) {
-			PreparedStatement statement = connection.prepareStatement(GET_ARTICLES_VENDUS);
+			PreparedStatement statement = connection.prepareStatement(GET_ALL_UTILISATEUR_ARTICLES);
 			statement.setInt(1, utilisateur.getId());
 			
 			ResultSet rs = statement.executeQuery();
 			
 			while(rs.next()) {
-				ArticleVendu articleVendu = new ArticleVendu();
-				articleVendu.setId(rs.getInt("no_article"));
-				articleVendu.setNom(rs.getString("nom_article"));
-				articleVendu.setDescription(rs.getString("description"));
-				articleVendu.setDateDebutEncheres((rs.getDate("date_debut_encheres").toLocalDate()));
-				articleVendu.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
-				articleVendu.setMiseAPrix(rs.getInt("prix_initial"));
-				articleVendu.setPrixVente(rs.getInt("prix_vente"));
-				articleVendu.setVendeur(utilisateur);
-				articleVendu.setCategorie(categorieDao.getById(rs.getInt("no_categorie")));
-				articleVendu.setLieuRetrait(retraitDao.getById(rs.getInt("no_retrait")));
-				listeArticlesVendus.add(articleVendu);
+				Article article = new Article();
+				article.setId(rs.getInt("no_article"));
+				article.setNom(rs.getString("nom_article"));
+				article.setDescription(rs.getString("description"));
+				article.setDateDebutEncheres((rs.getDate("date_debut_encheres").toLocalDate()));
+				article.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+				article.setMiseAPrix(rs.getInt("prix_initial"));
+				article.setPrixVente(rs.getInt("prix_vente"));
+				article.setVendeur(utilisateur);
+				article.setCategorie(categorieDao.getById(rs.getInt("no_categorie")));
+				article.setLieuRetrait(retraitDao.getById(rs.getInt("no_article")));
+				listeArticlesVendus.add(article);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.LECTURE_ARTICLES_ECHEC);
+			businessException.ajouterErreur(CodesResultatDAL.GET_ARTICLES_FAIL);
 			throw businessException;
 		}
-		return listeArticlesVendus;*/
-		return null;
+		return listeArticlesVendus;
+		
 	}
 
 	@Override

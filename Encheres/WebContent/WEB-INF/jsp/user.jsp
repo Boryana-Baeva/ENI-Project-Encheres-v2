@@ -25,11 +25,12 @@
     <div class="row">
         <div class="col-md-3 border-right">
             <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-	            <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
-	            <!-- <img class="rounded-circle mt-5" width="150px" src="img/icons8-brown-long-hair-lady-with-red-glasses.png"> -->
-	            
+	            <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">     
 	            <span class="font-weight-bold"><%=user.getPseudo() %></span>
 	            <span class="text-black-50"><%=user.getEmail()%></span>
+	            <% if(user.isAdministrateur()) { %>
+	            <span class="fw-bold"><i class="fas fa-star"></i> Administrateur</span>
+	            <% } %>
             </div>
         </div>
         <div class="col-md-7 border-right">
@@ -86,11 +87,12 @@
             </div>
         </div>
         
-        <% if( session.getAttribute("ConnectedUser") != null && Integer.valueOf(connectedUser.getId()).equals(Integer.valueOf(user.getId())) ) { %>
+        <% if( session.getAttribute("ConnectedUser") != null && 
+        (Integer.valueOf(connectedUser.getId()).equals(Integer.valueOf(user.getId())) || connectedUser.isAdministrateur() )) { %>
 	        <div class="col-md-2">          
 	             <div class="text-start mt-5">
-	             	<button class="btn btn-custom profile-button w-100" type="button">
-	             	<i class="fa-solid fa-pen-to-square"></i> Modifier</button>
+	             	<a class="btn btn-custom profile-button w-100" href="<%=request.getContextPath()%>/modifier-profil?id=<%=user.getId() %>" type="button">
+	             	<i class="fa-solid fa-pen-to-square"></i> Modifier</a>
 	             </div>
 	             <div class="text-start mt-2">
 	             	<button class="btn btn-danger profile-button w-100" type="button">
