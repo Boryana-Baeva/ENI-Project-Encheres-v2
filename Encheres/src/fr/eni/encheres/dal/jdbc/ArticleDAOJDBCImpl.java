@@ -23,14 +23,14 @@ import fr.eni.encheres.exceptions.BusinessException;
 
 public class ArticleDAOJDBCImpl implements ArticleDAO {
 	
-	private static final String GET_ALL = "select * from ARTICLES_VENDUS";
-	private static final String GET_BY_ID = "select * from ARTICLES_VENDUS where no_article= ?";
-	private static final String GET_BY_VENDEUR = "select * from ARTICLES_VENDUS where no_utilisateur= ?";
-	private static final String INSERT = "insert into ARTICLES_VENDUS (nom_article, description, date_debut_encheres, date_fin_encheres,prix_initial,no_utilisateur,no_categorie) VALUES (?,?,?,?,?,?,?)";
+	private static final String GET_ALL = "SELECT * FROM ARTICLES_VENDUS";
+	private static final String GET_BY_ID = "SELECT * FROM ARTICLES_VENDUS WHERE no_article= ?";
+	private static final String GET_BY_VENDEUR = "SELECT * FROM ARTICLES_VENDUS WHERE no_utilisateur= ?";
+	private static final String INSERT = "INSERT INTO ARTICLES_VENDUS (nom_article, description, date_debut_encheres, date_fin_encheres,prix_initial,no_utilisateur,no_categorie) VALUES (?,?,?,?,?,?,?)";
 	private static final String UPDATE = "UPDATE ARTICLES_VENDUS SET nom_article = ?, description = ?,"
 			+ "							 date_debut_encheres=?, date_fin_encheres= ?, prix_initial= ?, prix_vente= ?, "
-			+ "							 no_utilisateur= ?, no_categorie=? where no_article= ? ";
-	private static final String DELETE = "delete ARTICLES_VENDUS where no_article = ?";
+			+ "							 no_utilisateur= ?, no_categorie=? WHERE no_article= ? ";
+	private static final String DELETE = "DELETE ARTICLES_VENDUS WHERE no_article = ?";
 
 
 	

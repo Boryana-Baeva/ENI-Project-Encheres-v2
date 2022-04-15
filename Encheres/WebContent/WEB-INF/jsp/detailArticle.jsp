@@ -177,8 +177,8 @@
 		  	if (Integer.valueOf(connectedUser.getId()).equals(Integer.valueOf(article.getVendeur().getId()))) {%>	  	
 		  	 <div class="col-md-2">          
 	             <div class="text-start mt-5">
-	             	<button class="btn btn-custom article-button w-100" type="button">
-	             	<i class="fa-solid fa-pen-to-square"></i> Modifier</button>
+	             	<a class="btn btn-custom article-button w-100" href="<%=request.getContextPath()%>/modifier-article?id=<%=article.getId()%>" type="button">
+	             	<i class="fa-solid fa-pen-to-square"></i> Modifier</a>
 	             </div>
 	             <div class="text-start mt-2">
 	             	<button class="btn btn-danger article-button w-100" type="button">

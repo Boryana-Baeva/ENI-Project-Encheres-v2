@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@page import="fr.eni.encheres.bll.CategorieManager"%>
 <%@page import="fr.eni.encheres.bo.Categorie"%>
+<%@page import="fr.eni.encheres.bo.Article"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -13,11 +15,13 @@
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
   crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="styles/navbar.css">
-<title>Nouvelle vente</title>
+<title>Modifier Article</title>
 </head>
 <body>
 <!-- Navbar -->
 <jsp:include page="/WEB-INF/jsp/navbar.jsp"></jsp:include>
+
+<% Article article = (Article) request.getAttribute("article"); %>
 
 <div class="container bg-white mt-5 mb-5">
     <div class="row">
@@ -30,20 +34,23 @@
             <div class="p-3 py-5">
             <div class="card shadow bg-white rounded">
             		<div class="card-header">
-		                 <div class="card-title fw-bold fs-4">Nouvelle vente</div>
+		                 <div class="card-title fw-bold fs-4">Modifier Article</div>
 		             </div>
 	  				<div class="card-body">
-	  				<form class="vente" action="<%=request.getContextPath() %>/vendre" method="POST">
+	  				<form class="vente" action="<%=request.getContextPath() %>/modifier-article?id=<%= article.getId() %>" method="POST">
 		  				<div class="row">
 		  					<div class="col">
 			  					<div class="row mt-3">
 				                    <div class="col text-muted"><label class="labels">Article</label>
-				                    	<input type="text" class="form-control" placeholder="Nom de l'article" name="nom">
+				                    	<input type="text" class="form-control"
+				                    	 placeholder="Nom de l'article" name="nom"
+				                    	 value="<%= article.getNom() %>">
 				                    </div>
 				                </div>
 				                <div class="row mt-3">
 				                 	<div class="col text-muted"><label class="labels">Description</label>
-				                    	<textarea class="form-control" name="description" placeholder="Description..." rows="11" cols="50"></textarea>
+				                    	<textarea class="form-control" name="description"
+				                    	 placeholder="Description..." rows="11" cols="50"><%= article.getDescription() %></textarea>
 				                    </div>
 			                	</div>
 			  				</div>
@@ -53,25 +60,35 @@
 				                    	<label class="labels text-muted">Catégorie</label>
 				                    	<select class="form-select" aria-label="categories" name="category">
 										  <% for(Categorie categorie : CategorieManager.getAll()) { %>
-								            <option name="categorie" value ="<%=categorie.getId()%>"><%=categorie.getLibelle()%></option>
+											  	<% if(categorie.getId() == article.getCategorie().getId()) { %>
+									         	   	<option name="categorie" value ="<%=categorie.getId()%>" selected="selected"><%=categorie.getLibelle()%></option>
+									            <% } else { %>
+									            	<option name="categorie" value ="<%=categorie.getId()%>"><%=categorie.getLibelle()%></option>
+									            <% } %>  
 								           <% } %>
 										</select>
 									</div>
 				                    <div class="col-4">
-				                    	<label class="labels text-muted">Mise à prix</label><input type="number" class="form-control" placeholder="0" name="initial-price">          
+				                    	<label class="labels text-muted">Mise à prix</label>
+				                    	<input type="number" class="form-control" placeholder="0" 
+				                    	name="initial-price" value="<%= article.getMiseAPrix() %>">          
 				                    </div>
 			                    </div>	
 			                    
 			                 	<div class="row mt-3">
 				                 	<div class="col">
-				                 		<label class="labels text-muted">Début de l'enchère</label><input type="date" class="form-control" name="date-start">
+				                 		<label class="labels text-muted">Début de l'enchère</label>
+				                 		<input type="date" class="form-control" name="date-start"
+				                 		 value="<%= article.getDateDebutEncheres() %>">
 				                 	</div>
 				                 	<div class="col">
-				                 		<label class="labels text-muted">Fin de l'enchère</label><input type="date" class="form-control" name="date-end">
+				                 		<label class="labels text-muted">Fin de l'enchère</label>
+				                 		<input type="date" class="form-control" name="date-end"
+				                 		 value="<%= article.getDateFinEncheres() %>">
 				                 	</div>
 			                 	</div>   
 			                 	
-			                 	<hr class="card-title mt-5">
+			                 	<!-- <hr class="card-title mt-5">
 			                 	<div class="card-title text-center text-muted fs-5">Lieu de retrait</div>
 			                 	<div class="row mt-3">
 				                 	<div class="col">
@@ -88,13 +105,13 @@
 				                 		<label class="labels text-muted">Code Postal</label>
 				                 		<input type="text" class="form-control" name="code-postal">
 				                 	</div>  	
-			                 	</div> 
+			                 	</div>  -->
 			  				</div>
 		  				</div>
 		  				
 		                <div class="row mt-5">
 		                 	<div class="col text-end"><button class="btn btn-custom profile-button w-50" type="submit">Enregistrer</button></div>
-		                	<div class="col text-start"><a class="btn btn-secondary profile-button w-50" type="button" href="<%=request.getContextPath()%>/">Annuler</a></div>
+		                	<div class="col text-start"><a class="btn btn-secondary profile-button w-50" type="button" href="<%=request.getContextPath() %>/article?id=<%= article.getId() %>">Annuler</a></div>
 		                </div>
 			         </form>                   
 			       </div>
