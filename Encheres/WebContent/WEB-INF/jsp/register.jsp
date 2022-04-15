@@ -6,11 +6,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> 
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
   crossorigin="anonymous"></script>
 <title>Inscription</title>
 </head>
 <body>
+<% if( session.getAttribute("ConnectedUser") == null){ %>
 	<div class="containter-fluid">
 	    <div class="container" id="login-form-container">
 	        <div class="row">
@@ -149,5 +151,24 @@
 	        </div>
 	    </div>
 	</div>
+	<% } else { %>
+	<jsp:include page="/WEB-INF/jsp/navbar.jsp"></jsp:include>
+	<div class="container bg-white mt-5 mb-5">
+	    <div class="row">
+	    	<div class="col-6 mx-auto">
+	    		<div class="p-3 py-5">
+	            <div class="card shadow bg-white rounded">
+	            		<div class="card-header">
+			                 <div class="card-title fw-bold fs-4"><i class='fas fa-exclamation-triangle'></i> Accès restreint</div>
+			             </div>
+		  				<div class="card-body">
+		  				    <p><span class="test-muted fw-bold">Désolé.</span> En tant qu'utilisateur connecté, vous n'avez pas l'autorisation d'accéder à la page d'inscription.</p>
+				       </div>
+			        </div>
+		  		</div>
+	    	</div>
+	    </div>
+	</div>
+<% } %>
 </body>
 </html>

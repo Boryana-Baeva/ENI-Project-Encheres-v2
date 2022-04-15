@@ -94,7 +94,25 @@
     </div>
 </div>
 
-<%}%>
+<% } else { %>
+<div class="container bg-white mt-5 mb-5">
+    <div class="row">
+    	<div class="col-6 mx-auto">
+    		<div class="p-3 py-5">
+            <div class="card shadow bg-white rounded">
+            		<div class="card-header">
+		                 <div class="card-title fw-bold fs-4"><i class='fas fa-exclamation-triangle'></i> Accès restreint</div>
+		             </div>
+	  				<div class="card-body">
+	  				    <p><span class="test-muted fw-bold">Désolé.</span> Vous n'avez pas l'autorisation d'accéder à cette page.</p>
+			      		<p>Veuillez vous connecter afin de pouvoir la consulter. <a href="<%=request.getContextPath()%>/login">Connexion</a></p>
+			       </div>
+		        </div>
+	  		</div>
+    	</div>
+    </div>
+</div>
+<% } %>
 
 
 </body>

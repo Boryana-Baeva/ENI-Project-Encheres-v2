@@ -3,6 +3,7 @@
 <%@page import="fr.eni.encheres.bll.CategorieManager"%>
 <%@page import="fr.eni.encheres.bo.Categorie"%>
 <%@page import="fr.eni.encheres.bo.Article"%>
+<%@page import="fr.eni.encheres.bo.Utilisateur"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -22,6 +23,9 @@
 <jsp:include page="/WEB-INF/jsp/navbar.jsp"></jsp:include>
 
 <% Article article = (Article) request.getAttribute("article"); %>
+<% Utilisateur connectedUser = (Utilisateur) session.getAttribute("ConnectedUser"); %>
+
+<% if(connectedUser.getId() == article.getVendeur().getId()) { %>
 
 <div class="container bg-white mt-5 mb-5">
     <div class="row">
@@ -121,7 +125,24 @@
                  
     </div>
 </div>
-
+<% } else { %>
+<div class="container bg-white mt-5 mb-5">
+    <div class="row">
+    	<div class="col-6 mx-auto">
+    		<div class="p-3 py-5">
+            <div class="card shadow bg-white rounded">
+            		<div class="card-header">
+		                 <div class="card-title fw-bold fs-4"><i class='fas fa-exclamation-triangle'></i> Accès restreint</div>
+		             </div>
+	  				<div class="card-body">
+	  				    <p><span class="test-muted fw-bold">Désolé.</span> Vous n'avez pas l'autorisation de modifier cet article.</p>
+			       </div>
+		        </div>
+	  		</div>
+    	</div>
+    </div>
+</div>
+<% } %>
 
 </body>
 </html>
